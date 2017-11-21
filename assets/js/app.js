@@ -1,14 +1,17 @@
 var points = 0;
-var qIndex = -1;
+var qIndex = 0;
 var response;
-var timerIsActive = false;
+var timer;
 
 $(document).ready(function () {
   // BUTTONS
   $("#startBtn").on("click", function () {
+    points = 0;
+    qIndex = 0;
+    $("#startBtn").hide();
+    $("#pts").html("Points: " + points);
     setupGameTimer();
     showNextQuestion();
-    $("#startBtn").hide();
   });
   $("#choice1").on("click", function () {
     response = 0;
@@ -26,9 +29,6 @@ $(document).ready(function () {
     response = 3;
     checkResponse(3);
   });
-  // setTimeout(function () {
-  //
-  // }, 2000)
   // function myLoop() {
   //   setTimeout(function () {
   //     showQuestion(questions[qIndex]);
@@ -53,7 +53,6 @@ $(document).ready(function () {
 })
 
 function showNextQuestion() {
-  qIndex++;
   $("#questionLabel").html(questions[qIndex].q);
   $("#choice1").html("A: " + questions[qIndex].a[0]);
   $("#choice2").html("B: " + questions[qIndex].a[1]);
@@ -65,12 +64,11 @@ function setupGameTimer() {
   var seconds = 9;
   $("#timerLabel").html((seconds+1) + " left");
   $("#timerLabel").show();
-  var x = setInterval(function () {
+  timer = setInterval(function () {
     $("#timerLabel").html(seconds + " left");
     seconds--;
     if(seconds < 0) {
       showResult(false);
-      clearInterval(x);
     }
   }, 1000);
 }
@@ -81,6 +79,7 @@ function showResult(didWin) {
   $("#choice2").empty();
   $("#choice3").empty();
   $("#choice4").empty();
+  clearInterval(timer);
   if (didWin) {
     points++;
     $("#questionLabel").html("Congratulations! " + questions[qIndex].a[response] + " is correct!");
@@ -88,14 +87,15 @@ function showResult(didWin) {
   } else {
     $("#questionLabel").html("The answer is actually " + questions[qIndex].a[questions[qIndex].c]);
   }
+  qIndex++;
   if (qIndex >= questions.length) {
-    $("#questionLabel").append("GAME OVER");
+    $("#questionLabel").append(" GAME OVER");
     $("#startBtn").show();
   } else {
     setTimeout(function () {
       showNextQuestion();
       setupGameTimer();
-    }, 5000);
+    }, 3000);
   }
 }
 
