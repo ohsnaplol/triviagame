@@ -29,27 +29,6 @@ $(document).ready(function () {
     response = 3;
     checkResponse(3);
   });
-  // function myLoop() {
-  //   setTimeout(function () {
-  //     showQuestion(questions[qIndex]);
-  //     qIndex++
-  //   }, 2000)
-  //   if (qIndex < questions.length) {
-  //     myLoop();
-  //   }
-  // }
-  // myLoop();
-  // intervalId = setInterval(this.count(), 1000);
-  // for (var i = 0; i < questions.length; i++) {
-  //   qIndex = i;
-  //   setTimeout(function () {
-  //     showQuestion(questions[qIndex]);
-  //   }, 5000);
-  //   if (response == questions[qIndex].c) {
-  //     points++;
-  //     console.log("points: " + points);
-  //   }
-  // }
 })
 
 function showNextQuestion() {
@@ -75,17 +54,14 @@ function setupGameTimer() {
 
 function showResult(didWin) {
   $("#timerLabel").hide();
-  $("#choice1").empty();
-  $("#choice2").empty();
-  $("#choice3").empty();
-  $("#choice4").empty();
+  $("#choice1, #choice2, #choice3, #choice4").empty();
   clearInterval(timer);
   if (didWin) {
     points++;
     $("#questionLabel").html("Congratulations! " + questions[qIndex].a[response] + " is correct!");
     $("#pts").html("Points: " + points);
   } else {
-    $("#questionLabel").html("The answer is actually " + questions[qIndex].a[questions[qIndex].c]);
+    $("#questionLabel").html("Sorry, it's " + questions[qIndex].a[questions[qIndex].c]);
   }
   qIndex++;
   if (qIndex >= questions.length) {
@@ -100,11 +76,7 @@ function showResult(didWin) {
 }
 
 function checkResponse(response) {
-  if (questions[qIndex].c == response) {
-    showResult(true);
-  } else {
-    showResult(false);
-  }
+  questions[qIndex].c === response ? showResult(true) : showResult(false);
 }
 
 var questions = [
@@ -118,5 +90,11 @@ var questions = [
     q: "What is this quiz written in?",
     a: ["Java", "C++", "Swift", "Javascript"],
     c: 3
+  },
+
+  {
+    q: "What kind of watch does Mariela have?",
+    a: ["Komono", "Apple", "Swatch", "Rolex"],
+    c: 0
   }
 ]
